@@ -51,7 +51,7 @@
         </rowConstraints>
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" text="命令" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <TextField fx:id="exec" onKeyPressed="#execCommand" GridPane.columnIndex="1">
+            <TextField fx:id="exec" disable="true" onKeyPressed="#execCommand" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>

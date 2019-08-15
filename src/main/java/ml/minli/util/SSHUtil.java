@@ -1,13 +1,19 @@
 package ml.minli.util;
 
-import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
-import org.apache.commons.io.IOUtils;
+import javafx.application.Platform;
+import javafx.scene.control.TextArea;
 
-import java.io.InputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 
 public class SSHUtil {
+
+    private static ChannelShell channelShell;
 
     public static Session getJSchSession(String username, String password, String host, int port) throws Exception {
         JSch jSch = new JSch();
@@ -18,15 +24,32 @@ public class SSHUtil {
         return session;
     }
 
-    public static String execCommand(Session session, String command) throws Exception {
-        ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
-        InputStream inputStream = channelExec.getInputStream();
-        channelExec.setCommand(command);
-        channelExec.setErrStream(System.err);
-        channelExec.connect();
-        String result = IOUtils.toString(inputStream, "UTF-8");
-        channelExec.disconnect();
-        return result;
+    public static void execCommand(Session session, String command, TextArea textArea) throws Exception {
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                String text = String.valueOf((char) b);
+                Platform.runLater(() -> textArea.appendText(text));
+            }
+
+            @Override
+            public void write(byte[] b, int off, int len) throws IOException {
+                String text = new String(b, off, len);
+                Platform.runLater(() -> textArea.appendText(text));
+            }
+        }, true));
+        if (channelShell == null) {
+            channelShell = (ChannelShell) session.openChannel("shell");
+            channelShell.connect();
+            channelShell.setOutputStream(System.out, true);
+        }
+        PrintWriter printWriter = new PrintWriter(channelShell.getOutputStream());
+        String isColor = "";
+        if (command.contains("ls") || command.contains("ll")) {
+            isColor = " --color=never";
+        }
+        printWriter.println(command + isColor);
+        printWriter.flush();
     }
 
 }

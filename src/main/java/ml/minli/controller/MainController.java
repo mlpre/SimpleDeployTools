@@ -232,7 +232,6 @@ public class MainController {
             Scene scene = new Scene(ssh, 600, 800);
             Stage stage = new Stage();
             stage.setTitle("SSH控制台");
-            stage.setResizable(false);
             stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("img/logo.png")));
             stage.setScene(scene);
             stage.show();
