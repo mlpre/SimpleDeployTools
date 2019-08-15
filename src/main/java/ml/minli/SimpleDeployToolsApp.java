@@ -40,9 +40,8 @@ public class SimpleDeployToolsApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent main = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/main.fxml"));
         primaryStage.setTitle("简单部署工具(By Minli)");
-        primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("img/logo.png")));
-        Scene scene = new Scene(main, 800, 600);
+        Scene scene = new Scene(main);
         primaryStage.setScene(scene);
         if (load) {
             new Thread(new Task<Void>() {

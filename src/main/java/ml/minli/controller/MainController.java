@@ -1,5 +1,7 @@
 package ml.minli.controller;
 
+import com.jcraft.jsch.Session;
+import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -12,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ml.minli.util.SSHUtil;
 import org.ini4j.Wini;
 
 import java.io.BufferedReader;
@@ -66,6 +69,11 @@ public class MainController {
     public static String webClean;
 
     public static String webServerClean;
+
+    @FXML
+    public JFXButton connect;
+
+    private static Session session;
 
     public void setIniFile() {
         FileChooser fileChooser = new FileChooser();
@@ -241,5 +249,42 @@ public class MainController {
     }
 
     public void scpTools() {
+    }
+
+    public void connectServer() {
+        new Thread(new Task<Void>() {
+            @Override
+            protected Void call() {
+                try {
+                    if ((session == null || !session.isConnected()) && "连接".equals(connect.getText())) {
+                        session = SSHUtil.getJSchSession(usernameField.getText(), passwordField.getText(), ipField.getText(), Integer.valueOf(portField.getText()));
+                        System.out.println("连接成功！");
+                        Platform.runLater(() -> {
+                            ipField.setDisable(true);
+                            portField.setDisable(true);
+                            usernameField.setDisable(true);
+                            passwordField.setDisable(true);
+                            connect.setText("断开");
+                            connect.setStyle("-fx-background-color: #CC0033");
+                        });
+                        SSHUtil.execCommand(session, "bash", message);
+                    } else if (session != null && session.isConnected() && "断开".equals(connect.getText())) {
+                        session.disconnect();
+                        System.out.println("连接断开！");
+                        Platform.runLater(() -> {
+                            ipField.setDisable(false);
+                            portField.setDisable(false);
+                            usernameField.setDisable(false);
+                            passwordField.setDisable(false);
+                            connect.setText("连接");
+                            connect.setStyle("-fx-background-color: #009966");
+                        });
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }).start();
     }
 }

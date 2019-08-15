@@ -44,7 +44,7 @@ public class SSHController {
                             connect.setStyle("-fx-background-color: #CC0033");
                             exec.setDisable(false);
                         });
-                        SSHUtil.execCommand(session, "ls", console);
+                        SSHUtil.execCommand(session, "bash", console);
                     } else if (session != null && session.isConnected() && "断开".equals(connect.getText())) {
                         session.disconnect();
                         System.out.println("连接断开！");
@@ -81,4 +81,5 @@ public class SSHController {
             }).start();
         }
     }
+
 }

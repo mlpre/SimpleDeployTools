@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="main" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ml.minli.controller.MainController">
+<VBox fx:id="main" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ml.minli.controller.MainController">
     <children>
         <MenuBar>
             <menus>
@@ -177,7 +177,7 @@
                     </padding>
                 </Label>
                 <PasswordField fx:id="passwordField" prefHeight="30.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                <JFXButton alignment="CENTER" contentDisplay="CENTER" style="-fx-background-color: #009966;" text="连接" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <JFXButton fx:id="connect" alignment="CENTER" contentDisplay="CENTER" onAction="#connectServer" style="-fx-background-color: #009966;" text="连接" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <padding>
                         <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
                     </padding>
