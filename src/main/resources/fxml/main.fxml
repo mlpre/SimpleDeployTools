@@ -1,68 +1,236 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.layout.AnchorPane?>
-
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTextArea?>
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController" styleClass="main"
-            fx:id="main">
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="main" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ml.minli.controller.MainController">
     <children>
-        <MenuBar AnchorPane.bottomAnchor="575.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                 AnchorPane.topAnchor="0.0" styleClass="menu-bar">
+        <MenuBar>
             <menus>
-                <Menu mnemonicParsing="false" text="设置" styleClass="menu">
+            <Menu mnemonicParsing="false" text="工具">
+               <items>
+                  <MenuItem fx:id="ssh" mnemonicParsing="false" onAction="#sshTools" text="SSH" />
+                  <MenuItem fx:id="scp" mnemonicParsing="false" onAction="#scpTools" text="SCP" />
+               </items>
+            </Menu>
+                <Menu mnemonicParsing="false" text="设置">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="选择配置文件" onAction="#chooiceConfig"/>
+                        <MenuItem fx:id="set" mnemonicParsing="false" onAction="#setIniFile" text="选择配置文件" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="关于" styleClass="menu">
+                <Menu mnemonicParsing="false" text="关于">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="使用说明"/>
-                        <MenuItem mnemonicParsing="false" text="开发者"/>
+                        <MenuItem fx:id="use" mnemonicParsing="false" onAction="#useInfo" text="使用说明" />
+                        <MenuItem fx:id="about" mnemonicParsing="false" onAction="#aboutInfo" text="关于" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
+        <Label alignment="CENTER" contentDisplay="CENTER" text="简单部署工具" textAlignment="CENTER">
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </Label>
+        <Separator prefWidth="200.0" />
+        <HBox alignment="CENTER" prefHeight="50.0">
+            <children>
+                <Label text="前端项目">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                    <HBox.margin>
+                        <Insets right="30.0" />
+                    </HBox.margin>
+                </Label>
+                <TextField fx:id="webPathField" prefHeight="30.0" prefWidth="300.0">
+                    <HBox.margin>
+                        <Insets right="30.0" />
+                    </HBox.margin>
+                </TextField>
+                <JFXButton alignment="CENTER" contentDisplay="CENTER" onAction="#chooiceWeb" style="-fx-background-color: #4D66CC;" text="选择路径" textAlignment="CENTER" textFill="WHITE">
+                    <padding>
+                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                    </padding>
+                    <HBox.margin>
+                        <Insets right="30.0" />
+                    </HBox.margin>
+                </JFXButton>
+            <JFXButton alignment="CENTER" contentDisplay="CENTER" onAction="#packageWeb" style="-fx-background-color: #4D66CC;" text="打包" textAlignment="CENTER" textFill="WHITE">
+               <padding>
+                  <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets right="30.0" />
+               </HBox.margin>
+            </JFXButton>
+                <JFXButton alignment="CENTER" contentDisplay="CENTER" onAction="#cleanWeb" style="-fx-background-color: #FFA500;" text="清理" textAlignment="CENTER" textFill="WHITE">
+                    <padding>
+                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                    </padding>
+                </JFXButton>
+            </children>
+        </HBox>
+        <Separator prefWidth="200.0" />
+      <HBox alignment="CENTER" layoutX="10.0" layoutY="73.0" prefHeight="50.0">
+         <children>
+            <Label text="后端项目">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets right="30.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="webServerPathField" prefHeight="30.0" prefWidth="300.0">
+               <HBox.margin>
+                  <Insets right="30.0" />
+               </HBox.margin>
+            </TextField>
+            <JFXButton alignment="CENTER" contentDisplay="CENTER" onAction="#chooiceWebServer" style="-fx-background-color: #4D66CC;" text="选择路径" textAlignment="CENTER" textFill="WHITE">
+               <padding>
+                  <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets right="30.0" />
+               </HBox.margin>
+            </JFXButton>
+            <JFXButton alignment="CENTER" contentDisplay="CENTER" onAction="#packageWebServer" style="-fx-background-color: #4D66CC;" text="打包" textAlignment="CENTER" textFill="WHITE">
+               <padding>
+                  <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets right="30.0" />
+               </HBox.margin>
+            </JFXButton>
+            <JFXButton alignment="CENTER" contentDisplay="CENTER" onAction="#cleanWebServer" style="-fx-background-color: #FFA500;" text="清理" textAlignment="CENTER" textFill="WHITE">
+               <padding>
+                  <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+               </padding>
+            </JFXButton>
+         </children>
+      </HBox>
+        <Separator prefWidth="200.0" />
+        <GridPane alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" text="IP" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </Label>
+                <TextField fx:id="ipField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                <Label alignment="CENTER" contentDisplay="CENTER" text="端口" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </Label>
+                <TextField fx:id="portField" prefHeight="30.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            </children>
+        </GridPane>
+        <Separator prefWidth="200.0" />
+        <GridPane alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" text="用户名" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </Label>
+                <TextField fx:id="usernameField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                <Label alignment="CENTER" contentDisplay="CENTER" text="密码" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </Label>
+                <PasswordField fx:id="passwordField" prefHeight="30.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                <JFXButton alignment="CENTER" contentDisplay="CENTER" style="-fx-background-color: #009966;" text="连接" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <padding>
+                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                    </padding>
+                </JFXButton>
+            </children>
+        </GridPane>
+        <Separator prefWidth="200.0" />
+        <GridPane alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" text="操作" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </Label>
+                <JFXButton alignment="CENTER" contentDisplay="CENTER" style="-fx-background-color: #4D66CC;" text="一键打包" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <padding>
+                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                    </padding>
+                </JFXButton>
+                <JFXButton alignment="CENTER" contentDisplay="CENTER" layoutX="683.0" layoutY="18.0" style="-fx-background-color: #FF4500;" text="一键部署" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <padding>
+                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                    </padding>
+                </JFXButton>
+                <JFXButton alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="18.0" style="-fx-background-color: #4D66CC;" text="一键打包并部署" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <padding>
+                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                    </padding>
+                </JFXButton>
+                <JFXButton alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="18.0" style="-fx-background-color: #FF4500;" text="一键清理" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <padding>
+                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                    </padding>
+                </JFXButton>
+            </children>
+        </GridPane>
+        <Separator prefWidth="200.0" />
+        <Label text="消息">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </Label>
+        <Separator prefWidth="200.0" />
+        <TextArea fx:id="message" wrapText="true" VBox.vgrow="ALWAYS" />
     </children>
-    <children>
-        <Label layoutY="50" styleClass="title">欢迎使用简单部署工具(By Minli)</Label>
-    </children>
-    <children>
-        <Label layoutY="105" layoutX="20" styleClass="font">前端项目路径：</Label>
-        <TextField layoutY="100" layoutX="130" fx:id="webProject" styleClass="path-text-field"/>
-        <JFXButton layoutY="100" layoutX="460" styleClass="button-raised" onAction="#webProject">选择</JFXButton>
-        <JFXButton layoutY="100" layoutX="575" styleClass="button-raised" onAction="#webPack">一键打包</JFXButton>
-        <JFXButton layoutY="100" layoutX="690" styleClass="button-raised" onAction="#clearWeb"
-                   fx:id="clearWeb">清理
-        </JFXButton>
-    </children>
-    <children>
-        <Label layoutY="155" layoutX="20" styleClass="font">后端项目路径：</Label>
-        <TextField layoutY="150" layoutX="130" fx:id="webServerProject" styleClass="path-text-field"/>
-        <JFXButton layoutY="150" layoutX="460" styleClass="button-raised" onAction="#webServerProject">选择</JFXButton>
-        <JFXButton layoutY="150" layoutX="575" styleClass="button-raised" onAction="#webServerPack">一键打包</JFXButton>
-        <JFXButton layoutY="150" layoutX="690" styleClass="button-raised" onAction="#clearWebServer"
-                   fx:id="clearWebServer">清理
-        </JFXButton>
-    </children>
-    <children>
-        <Label layoutY="205" layoutX="20" styleClass="font">IP：</Label>
-        <TextField layoutY="200" layoutX="60" fx:id="webServerIp" styleClass="server-text-field" prefWidth="150"/>
-        <Label layoutY="205" layoutX="250" styleClass="font">用户名：</Label>
-        <TextField layoutY="200" layoutX="330" fx:id="username" styleClass="server-text-field" prefWidth="100"/>
-        <Label layoutY="205" layoutX="470" styleClass="font">密码：</Label>
-        <TextField layoutY="200" layoutX="550" fx:id="password" styleClass="server-text-field" prefWidth="100"/>
-        <JFXButton layoutY="200" layoutX="690" styleClass="button-raised">部署</JFXButton>
-    </children>
-    <children>
-        <Label layoutY="280" styleClass="message-lable" prefWidth="800">消息：</Label>
-        <JFXTextArea AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
-                     AnchorPane.topAnchor="300" wrapText="true" styleClass="message" fx:id="message"/>
-    </children>
-</AnchorPane>
+</VBox>
