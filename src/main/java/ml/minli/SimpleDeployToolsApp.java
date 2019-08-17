@@ -30,6 +30,7 @@ public class SimpleDeployToolsApp extends Application {
                 MainController.webServerPackage = wini.get("Command", "webServerPackage", String.class);
                 MainController.webClean = wini.get("Command", "webClean", String.class);
                 MainController.webServerClean = wini.get("Command", "webServerClean", String.class);
+                MainController.shell = wini.get("Command", "shell", String.class);
                 load = true;
             }
         } catch (Exception e) {

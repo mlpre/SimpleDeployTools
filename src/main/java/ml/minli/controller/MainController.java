@@ -70,6 +70,8 @@ public class MainController {
 
     public static String webServerClean;
 
+    public static String shell;
+
     @FXML
     public JFXButton connect;
 
@@ -237,7 +239,7 @@ public class MainController {
     public void sshTools() {
         try {
             Parent ssh = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/ssh.fxml"));
-            Scene scene = new Scene(ssh, 600, 800);
+            Scene scene = new Scene(ssh);
             Stage stage = new Stage();
             stage.setTitle("SSH控制台");
             stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("img/logo.png")));
@@ -286,5 +288,13 @@ public class MainController {
                 return null;
             }
         }).start();
+    }
+
+    public void oneDeploy() {
+        try {
+            SSHUtil.execCommand(session, shell, message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

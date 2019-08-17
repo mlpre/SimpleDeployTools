@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="main" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ml.minli.controller.MainController">
+<VBox fx:id="main" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ml.minli.controller.MainController">
     <children>
         <MenuBar>
             <menus>
@@ -202,22 +202,22 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </padding>
                 </Label>
-                <JFXButton alignment="CENTER" contentDisplay="CENTER" style="-fx-background-color: #4D66CC;" text="一键打包" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <JFXButton alignment="CENTER" contentDisplay="CENTER" style="-fx-background-color: #4D66CC;" text="一键清理打包" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <padding>
                         <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
                     </padding>
                 </JFXButton>
-                <JFXButton alignment="CENTER" contentDisplay="CENTER" layoutX="683.0" layoutY="18.0" style="-fx-background-color: #FF4500;" text="一键部署" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <JFXButton alignment="CENTER" contentDisplay="CENTER" layoutX="683.0" layoutY="18.0" onAction="#oneDeploy" style="-fx-background-color: #FF4500;" text="一键部署" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <padding>
                         <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
                     </padding>
                 </JFXButton>
-                <JFXButton alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="18.0" style="-fx-background-color: #4D66CC;" text="一键打包并部署" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <JFXButton alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="18.0" style="-fx-background-color: #FF4500;" text="一键打包并部署" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <padding>
                         <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
                     </padding>
                 </JFXButton>
-                <JFXButton alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="18.0" style="-fx-background-color: #FF4500;" text="一键清理" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <JFXButton alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="18.0" style="-fx-background-color: #FF4500;" text="执行脚本" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <padding>
                         <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
                     </padding>

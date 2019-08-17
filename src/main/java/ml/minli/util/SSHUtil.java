@@ -19,7 +19,7 @@ public class SSHUtil {
     public static Session getJSchSession(String username, String password, String host, int port) throws Exception {
         JSch jSch = new JSch();
         Session session = jSch.getSession(username, host, port);
-        session.setPassword("19971212");
+        session.setPassword(password);
         session.setConfig("StrictHostKeyChecking", "no");
         session.connect();
         return session;
@@ -33,13 +33,13 @@ public class SSHUtil {
             @Override
             public void write(int b) throws IOException {
                 String text = String.valueOf((char) b);
-                Platform.runLater(() -> textArea.appendText(text + "\r\n"));
+                Platform.runLater(() -> textArea.appendText(text));
             }
 
             @Override
             public void write(byte[] b, int off, int len) throws IOException {
                 String text = new String(b, off, len);
-                Platform.runLater(() -> textArea.appendText(text + "\r\n"));
+                Platform.runLater(() -> textArea.appendText(text));
             }
         }, true));
         if (channel == null || command.contains("bash")) {
@@ -48,11 +48,7 @@ public class SSHUtil {
             outputStream = channel.getOutputStream();
             channel.connect();
         }
-        if (command.contains("ls") || command.contains("ll")) {
-            command = command + " --color=none \r";
-        } else {
-            command = command + " \r";
-        }
+        command = command + " \r";
         outputStream.write(command.getBytes());
         outputStream.flush();
         if (command.contains("exit")) {
