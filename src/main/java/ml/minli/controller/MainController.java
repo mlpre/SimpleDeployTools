@@ -251,6 +251,17 @@ public class MainController {
     }
 
     public void scpTools() {
+        try {
+            Parent ssh = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/scp.fxml"));
+            Scene scene = new Scene(ssh);
+            Stage stage = new Stage();
+            stage.setTitle("SCP工具");
+            stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("img/logo.png")));
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void connectServer() {
