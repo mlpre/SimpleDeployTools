@@ -241,7 +241,7 @@ public class MainController {
             Parent ssh = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/ssh.fxml"));
             Scene scene = new Scene(ssh);
             Stage stage = new Stage();
-            stage.setTitle("SSH控制台");
+            stage.setTitle("SSH控制台(By Minli)");
             stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("img/logo.png")));
             stage.setScene(scene);
             stage.show();
@@ -255,7 +255,8 @@ public class MainController {
             Parent ssh = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/scp.fxml"));
             Scene scene = new Scene(ssh);
             Stage stage = new Stage();
-            stage.setTitle("SCP工具");
+            stage.setTitle("SCP工具(By Minli)");
+            stage.setResizable(false);
             stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("img/logo.png")));
             stage.setScene(scene);
             stage.show();
