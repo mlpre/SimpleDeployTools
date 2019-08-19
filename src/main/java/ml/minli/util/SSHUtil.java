@@ -9,6 +9,7 @@ import javafx.scene.control.TextArea;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
 public class SSHUtil {
 
@@ -38,7 +39,7 @@ public class SSHUtil {
 
             @Override
             public void write(byte[] b, int off, int len) throws IOException {
-                String text = new String(b, off, len);
+                String text = new String(b, off, len, StandardCharsets.UTF_8);
                 Platform.runLater(() -> textArea.appendText(text));
             }
         }, true));
@@ -48,7 +49,11 @@ public class SSHUtil {
             outputStream = channel.getOutputStream();
             channel.connect();
         }
-        command = command + " \r";
+        if (command.contains("cd") || command.contains("bash") || command.contains("exit")) {
+            command = command + " \r";
+        } else {
+            command = command + " | sed -r \"s/\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g\" \r";
+        }
         outputStream.write(command.getBytes());
         outputStream.flush();
         if (command.contains("exit")) {
