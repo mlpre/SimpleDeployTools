@@ -29,6 +29,7 @@ public class SSHController {
     private static Session session;
 
     public void connectServer() {
+        SSHUtil.setOut(console);
         new Thread(new Task<Void>() {
             @Override
             protected Void call() {

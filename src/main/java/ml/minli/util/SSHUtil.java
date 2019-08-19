@@ -30,19 +30,7 @@ public class SSHUtil {
         if (command == null || command.isEmpty()) {
             return;
         }
-        System.setOut(new PrintStream(new OutputStream() {
-            @Override
-            public void write(int b) throws IOException {
-                String text = String.valueOf((char) b);
-                Platform.runLater(() -> textArea.appendText(text));
-            }
-
-            @Override
-            public void write(byte[] b, int off, int len) throws IOException {
-                String text = new String(b, off, len, StandardCharsets.UTF_8);
-                Platform.runLater(() -> textArea.appendText(text));
-            }
-        }, true));
+        setOut(textArea);
         if (channel == null || command.contains("bash")) {
             channel = session.openChannel("shell");
             channel.setOutputStream(System.out, true);
@@ -61,5 +49,21 @@ public class SSHUtil {
                 channel.disconnect();
             }
         }
+    }
+
+    public static void setOut(TextArea textArea) {
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                String text = String.valueOf((char) b);
+                Platform.runLater(() -> textArea.appendText(text));
+            }
+
+            @Override
+            public void write(byte[] b, int off, int len) throws IOException {
+                String text = new String(b, off, len, StandardCharsets.UTF_8);
+                Platform.runLater(() -> textArea.appendText(text));
+            }
+        }, true));
     }
 }

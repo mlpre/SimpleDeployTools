@@ -265,6 +265,7 @@ public class MainController {
     }
 
     public void connectServer() {
+        SSHUtil.setOut(message);
         new Thread(new Task<Void>() {
             @Override
             protected Void call() {
