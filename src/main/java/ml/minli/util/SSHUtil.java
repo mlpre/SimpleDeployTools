@@ -9,7 +9,6 @@ import javafx.scene.control.TextArea;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
 
 public class SSHUtil {
 
@@ -61,7 +60,7 @@ public class SSHUtil {
 
             @Override
             public void write(byte[] b, int off, int len) throws IOException {
-                String text = new String(b, off, len, StandardCharsets.UTF_8);
+                String text = new String(b, off, len, System.getProperty("file.encoding"));
                 Platform.runLater(() -> textArea.appendText(text));
             }
         }, true));
