@@ -55,6 +55,15 @@ public class SSHUtil {
         }
     }
 
+    private static void execOnceCommand(Session session, String command) throws Exception {
+        if (command == null || command.isEmpty()) {
+            return;
+        }
+        channel = session.openChannel("exec");
+        ((ChannelExec) channel).setCommand(command);
+        channel.connect();
+    }
+
     public static synchronized void upload(Session session, String localPath, String serverPath, SftpProgressMonitor sftpProgressMonitor) throws Exception {
         if (sftp == null || sftp.isClosed()) {
             sftp = (ChannelSftp) session.openChannel("sftp");
@@ -70,7 +79,7 @@ public class SSHUtil {
         if (commandList != null) {
             commandList.forEach(s -> {
                 try {
-                    execCommand(session, s, new TextArea());
+                    execOnceCommand(session, s);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -88,7 +97,11 @@ public class SSHUtil {
             });
         } else {
             for (int i = 0; i < localFileList.size(); i++) {
-                sftp.put(localFileList.get(i).getPath(), serverFileList.get(i), sftpProgressMonitor, ChannelSftp.OVERWRITE);
+                try {
+                    sftp.put(localFileList.get(i).getPath(), serverFileList.get(i), sftpProgressMonitor, ChannelSftp.OVERWRITE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             sftp.quit();
             sftp.disconnect();
