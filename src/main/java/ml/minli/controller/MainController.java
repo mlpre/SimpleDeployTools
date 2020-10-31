@@ -1,301 +1,140 @@
 package ml.minli.controller;
 
-import com.jcraft.jsch.Session;
+import com.google.common.base.Ascii;
+import com.jediterm.terminal.ui.JediTermWidget;
+import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import ml.minli.util.FileUtil;
+import ml.minli.util.JSchShellTtyConnector;
 import ml.minli.util.SSHUtil;
-import org.ini4j.Wini;
 
-import java.io.BufferedReader;
+import javax.swing.*;
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainController {
-    @FXML
-    public VBox main;
-    @FXML
-    public MenuItem ssh;
-    @FXML
-    public MenuItem scp;
-    @FXML
-    public MenuItem set;
-    @FXML
-    public MenuItem use;
-    @FXML
-    public MenuItem about;
-    @FXML
-    public TextField webPathField;
-    @FXML
-    public TextField webServerPathField;
-    @FXML
-    public TextField ipField;
-    @FXML
-    public TextField portField;
-    @FXML
-    public TextField usernameField;
-    @FXML
-    public PasswordField passwordField;
-    @FXML
-    public TextArea message;
 
-    public static String webPath;
-
-    public static String webServerPath;
-
-    public static String ip;
-
-    public static String port;
-
-    public static String userName;
-
-    public static String passWord;
-
-    public static String webPackage;
-
-    public static String webServerPackage;
-
-    public static String webClean;
-
-    public static String webServerClean;
-
-    public static String shell;
-
+    @FXML
+    public VBox root;
+    @FXML
+    public TextField ip;
+    @FXML
+    public TextField userName;
+    @FXML
+    public PasswordField passWord;
     @FXML
     public JFXButton connect;
+    @FXML
+    public StackPane container;
 
-    private static Session session;
+    public static JediTermWidget message;
 
-    public void setIniFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("选择配置文件");
-        fileChooser.setInitialDirectory(new File("."));
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("配置文件", "*.ini"));
-        File file = fileChooser.showOpenDialog(main.getScene().getWindow());
-        new Thread(new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                try {
-                    if (file != null) {
-                        Wini wini = new Wini(file);
-                        webPath = wini.get("Path", "webPath", String.class);
-                        webServerPath = wini.get("Path", "webServerPath", String.class);
-                        ip = wini.get("SSH", "ip", String.class);
-                        port = wini.get("SSH", "port", String.class);
-                        userName = wini.get("SSH", "userName", String.class);
-                        passWord = wini.get("SSH", "passWord", String.class);
-                        webPackage = wini.get("Command", "webPackage", String.class);
-                        webServerPackage = wini.get("Command", "webServerPackage", String.class);
-                        webClean = wini.get("Command", "webClean", String.class);
-                        webServerClean = wini.get("Command", "webServerClean", String.class);
+    public AtomicBoolean ctrl = new AtomicBoolean(false);
+
+    public AtomicBoolean c = new AtomicBoolean(false);
+
+    private AtomicBoolean sshStatus = new AtomicBoolean(false);
+
+    private Thread thread = new Thread(new Task<Void>() {
+        @Override
+        protected Void call() {
+            while (true) {
+                if (sshStatus.get() && ctrl.get() && c.get()) {
+                    try {
+                        byte[] bytes = new byte[]{Ascii.ETX};
+                        message.getTtyConnector().write(bytes);
+                        if (!Thread.currentThread().isInterrupted()) {
+                            Thread.sleep(500);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-                return null;
-            }
-
-            @Override
-            protected void succeeded() {
-                new Thread(new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        Platform.runLater(() -> {
-                            webPathField.setText(webPath);
-                            webServerPathField.setText(webServerPath);
-                            ipField.setText(ip);
-                            portField.setText(port);
-                            usernameField.setText(userName);
-                            passwordField.setText(passWord);
-                        });
-                        return null;
-                    }
-                }).start();
-            }
-        }).start();
-    }
-
-    public void useInfo() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("使用说明");
-        alert.setResizable(false);
-        alert.setContentText("选择前后端项目路径即可执行打包清理操作，连接服务器后即可执行部署相关操作。");
-        alert.show();
-    }
-
-    public void aboutInfo() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("开发者");
-        alert.setResizable(false);
-        alert.setContentText("By Minli");
-        alert.show();
-    }
-
-    public void chooiceWeb() {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("选择前端项目路径");
-        directoryChooser.setInitialDirectory(new File("."));
-        File file = directoryChooser.showDialog(main.getScene().getWindow());
-        if (file != null) {
-            webPath = file.getAbsolutePath();
-            Platform.runLater(() -> webPathField.setText(file.getAbsolutePath()));
-        }
-    }
-
-    public void chooiceWebServer() {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("选择后端项目路径");
-        directoryChooser.setInitialDirectory(new File("."));
-        File file = directoryChooser.showDialog(main.getScene().getWindow());
-        if (file != null) {
-            webServerPath = file.getAbsolutePath();
-            Platform.runLater(() -> webServerPathField.setText(file.getAbsolutePath()));
-        }
-    }
-
-    public void packageWeb() {
-        if (checkString(webPath, webPackage)) {
-            configNotFound();
-        } else {
-            exec(webPath, webPackage);
-        }
-    }
-
-    public void cleanWeb() {
-        if (checkString(webPath, webClean)) {
-            configNotFound();
-        } else {
-            exec(webPath, webClean);
-        }
-    }
-
-    public void packageWebServer() {
-        if (checkString(webServerPath, webServerPackage)) {
-            configNotFound();
-        } else {
-            exec(webServerPath, webServerPackage);
-        }
-    }
-
-    public void cleanWebServer() {
-        if (checkString(webServerPath, webServerClean)) {
-            configNotFound();
-        } else {
-            exec(webServerPath, webServerClean);
-        }
-    }
-
-    private void exec(String path, String cmd) {
-        new Thread(new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                Process process = Runtime.getRuntime().exec("cmd /c cd /d " + path + " & " + cmd);
-                InputStream inputStream = process.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                String line = "";
-                String temp = "";
-                while ((line = bufferedReader.readLine()) != null) {
-                    temp += line + "\r\n";
-                    String show = temp;
-                    Platform.runLater(() -> {
-                        message.setText(show);
-                        message.appendText("");
-                        message.setScrollTop(Double.MAX_VALUE);
-                    });
-                }
-                return null;
-            }
-        }).start();
-    }
-
-    private void configNotFound() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("配置项未找到");
-        alert.setResizable(false);
-        alert.setContentText("请检查配置文件是否正确！");
-        alert.show();
-    }
-
-    private boolean checkString(String... string) {
-        for (String str : string) {
-            if (str == null || "".equals(str)) {
-                return true;
             }
         }
-        return false;
-    }
+    });
 
-    public void sshTools() {
-        try {
-            Parent ssh = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/ssh.fxml"));
-            Scene scene = new Scene(ssh);
-            Stage stage = new Stage();
-            stage.setTitle("SSH控制台(By Minli)");
-            stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("img/logo.png")));
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+    public synchronized void connectServer() {
+        if (ip.getText() == null || ip.getText().isEmpty()) {
+            alertWarningMessage("IP为空!");
+            return;
         }
-    }
-
-    public void scpTools() {
-        try {
-            Parent ssh = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/scp.fxml"));
-            Scene scene = new Scene(ssh);
-            Stage stage = new Stage();
-            stage.setTitle("SCP工具(By Minli)");
-            stage.setResizable(false);
-            stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("img/logo.png")));
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (userName.getText() == null || userName.getText().isEmpty()) {
+            alertWarningMessage("用户名为空!");
+            return;
         }
-    }
-
-    public void connectServer() {
-        SSHUtil.setOut(message);
+        if (passWord.getText() == null || passWord.getText().isEmpty()) {
+            alertWarningMessage("密码为空!");
+            return;
+        }
         new Thread(new Task<Void>() {
             @Override
             protected Void call() {
                 try {
-                    if ((session == null || !session.isConnected()) && "连接".equals(connect.getText())) {
-                        session = SSHUtil.getJSchSession(usernameField.getText(), passwordField.getText(), ipField.getText(), Integer.valueOf(portField.getText()));
-                        System.out.println("连接成功！");
+                    if ("连接".equals(connect.getText())) {
+                        String realIp = ip.getText();
+                        int realPort = 22;
+                        if (ip.getText().contains(":")) {
+                            String[] string = realIp.split(":");
+                            realIp = string[0];
+                            realPort = Integer.parseInt(string[1]);
+                        }
+                        SSHUtil.initSSHParam(realIp, realPort, userName.getText(), passWord.getText());
                         Platform.runLater(() -> {
-                            ipField.setDisable(true);
-                            portField.setDisable(true);
-                            usernameField.setDisable(true);
-                            passwordField.setDisable(true);
+                            ip.setDisable(true);
+                            userName.setDisable(true);
+                            passWord.setDisable(true);
                             connect.setText("断开");
                             connect.setStyle("-fx-background-color: #CC0033");
+                            SwingNode swingNode = new SwingNode();
+                            createAndSetSwingContent(swingNode);
+                            container.getChildren().add(swingNode);
                         });
-                        SSHUtil.execCommand(session, "bash", message);
-                    } else if (session != null && session.isConnected() && "断开".equals(connect.getText())) {
-                        session.disconnect();
-                        System.out.println("连接断开！");
+                        if (!thread.isAlive()) {
+                            thread.start();
+                        }
+                        sshStatus.set(true);
+                        root.setOnKeyPressed(event -> {
+                            if (event.getCode() == KeyCode.CONTROL) {
+                                ctrl.set(true);
+                            }
+                            if (event.getCode() == KeyCode.C) {
+                                c.set(true);
+                            }
+                        });
+                        root.setOnKeyReleased(event -> {
+                            if (event.getCode() == KeyCode.CONTROL) {
+                                ctrl.set(false);
+                            }
+                            if (event.getCode() == KeyCode.C) {
+                                c.set(false);
+                            }
+                        });
+                    } else if ("断开".equals(connect.getText())) {
+                        sshStatus.set(false);
                         Platform.runLater(() -> {
-                            ipField.setDisable(false);
-                            portField.setDisable(false);
-                            usernameField.setDisable(false);
-                            passwordField.setDisable(false);
+                            ip.setDisable(false);
+                            userName.setDisable(false);
+                            passWord.setDisable(false);
                             connect.setText("连接");
                             connect.setStyle("-fx-background-color: #009966");
+                            container.getChildren().removeAll(container.getChildren());
+                            message.close();
                         });
                     }
-                } catch (Exception e) {
+                } catch (
+                        Exception e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -303,11 +142,48 @@ public class MainController {
         }).start();
     }
 
-    public void oneDeploy() {
-        try {
-            SSHUtil.execCommand(session, shell, message);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void createAndSetSwingContent(SwingNode swingNode) {
+        SwingUtilities.invokeLater(() -> {
+            message = createTerminalWidget();
+            swingNode.setContent(message);
+        });
     }
+
+    private JediTermWidget createTerminalWidget() {
+        JediTermWidget jediTermWidget = new JediTermWidget(80, 15, new DefaultSettingsProvider());
+        jediTermWidget.setTtyConnector(new JSchShellTtyConnector());
+        jediTermWidget.start();
+        return jediTermWidget;
+    }
+
+    private void alertWarningMessage(String text) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("警告");
+        alert.setResizable(false);
+        alert.setContentText(text);
+        alert.show();
+    }
+
+    public synchronized void oneDeploy() throws Exception {
+        if (!sshStatus.get()) {
+            alertWarningMessage("SSH未连接!");
+            return;
+        }
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("选择脚本文件");
+        fileChooser.setInitialDirectory(new File("."));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("脚本文件", "*.sh"));
+        File file = fileChooser.showOpenDialog(root.getScene().getWindow());
+        if (file == null || !file.exists()) {
+            return;
+        }
+        JSchShellTtyConnector jSchShellTtyConnector = (JSchShellTtyConnector) message.getTtyConnector();
+        SSHUtil.upload(
+                jSchShellTtyConnector.getMySession(),
+                new FileInputStream(file),
+                "/root", file.getName());
+        jSchShellTtyConnector.write(("chmod +x /root " + file.getName() + "\r").getBytes(StandardCharsets.UTF_8));
+        jSchShellTtyConnector.write(("bash /root/" + file.getName() + "\r").getBytes(StandardCharsets.UTF_8));
+    }
+
 }
