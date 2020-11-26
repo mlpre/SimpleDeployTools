@@ -5,6 +5,7 @@ import com.jcraft.jsch.UserInfo;
 import com.jediterm.terminal.Questioner;
 
 class QuestionerUserInfo implements UserInfo, UIKeyboardInteractive {
+
     private Questioner myQuestioner;
     private String myPassword;
     private String myPassPhrase;

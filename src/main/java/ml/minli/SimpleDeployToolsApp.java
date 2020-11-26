@@ -8,4 +8,5 @@ public class SimpleDeployToolsApp {
     public static void main(String[] args) {
         Application.launch(MainUI.class, args);
     }
+
 }

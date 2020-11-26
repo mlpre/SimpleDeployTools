@@ -6,7 +6,6 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jediterm.terminal.Questioner;
 import com.jediterm.terminal.TtyConnector;
-import org.apache.log4j.Logger;
 
 import java.awt.*;
 import java.io.*;
@@ -14,8 +13,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class JSchTtyConnector<T extends Channel> implements TtyConnector {
-
-    public static final Logger LOG = Logger.getLogger(JSchTtyConnector.class);
 
     public static final int DEFAULT_PORT = 22;
 
@@ -96,13 +93,8 @@ public abstract class JSchTtyConnector<T extends Channel> implements TtyConnecto
             myChannelShell.connect();
             resizeImmediately();
             return true;
-        } catch (final IOException e) {
+        } catch (final IOException | JSchException e) {
             q.showMessage(e.getMessage());
-            LOG.error("Error opening channel", e);
-            return false;
-        } catch (final JSchException e) {
-            q.showMessage(e.getMessage());
-            LOG.error("Error opening session or channel", e);
             return false;
         } finally {
             isInitiated.set(true);
