@@ -1,8 +1,8 @@
-# SimpleDeployTools
+## SimpleDeployTools
 
 [Chinese Document](README.md)
 
-## The simple deployment tool based on JavaFX supports Chinese and English, supports command execution through SSH connection server, and supports the function of one key deployment by executing local script
+* ### The simple deployment tool based on JavaFX supports Chinese and English, supports command execution through SSH connection server, and supports the function of one key deployment by executing local script
 
 * ### How to use it:
 
