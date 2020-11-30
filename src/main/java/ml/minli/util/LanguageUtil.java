@@ -8,8 +8,9 @@ public class LanguageUtil {
     public static final ResourceBundle resourceBundle;
 
     static {
-        if (Locale.CHINA.equals(Locale.getDefault())) {
-            resourceBundle = ResourceBundle.getBundle("language.app", Locale.CHINA);
+        ResourceBundle defaultResourceBundle = ResourceBundle.getBundle("language.app", Locale.getDefault());
+        if (defaultResourceBundle != null) {
+            resourceBundle = defaultResourceBundle;
         } else {
             resourceBundle = ResourceBundle.getBundle("language.app", Locale.ENGLISH);
         }

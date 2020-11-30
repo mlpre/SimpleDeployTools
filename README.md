@@ -1,29 +1,35 @@
-## 简单部署工具
+## SimpleDeployTools
 
-[English Document](README_EN.md)
+[Chinese Document(中文文档)](README_ZH.md)
 
-* ### 基于JavaFx的简单部署工具，支持中文和英文，支持通过SSH连接服务器执行命令，同时支持执行本地脚本实现一键部署的功能
+* ### The simple deployment tool based on JavaFX supports Chinese and English, supports command execution through SSH connection server, and supports the function of one key deployment by executing local script
 
-* ### 如何使用:
+* ### How to use it:
 
-   * 下载 [Releases](https://github.com/min-li/SimpleDeployTools/releases)
+   * Download [Releases](https://github.com/min-li/SimpleDeployTools/releases)
     
    * Windows:
 
-     * 直接下载exe文件安装
+     * Download exe file install
 
    * Mac/Linux:
 
-     * 下载jar，执行java -jar SimpleDeployTools-1.0.jar
+     * Download jar, execution java -jar SimpleDeployTools-1.0.jar
 
-* ### 注意事项:
+* ### Note:
 
-    1. 默认端口22，如果需要使用其它端口，IP输入框输入IP:端口
+    1. The default port is 22. If you need to use another port, enter IP:port in the IP input box
     
-    2. 点击部署按钮后会弹出本地文件选择框，支持选择Shell脚本文件执行
+    2. After clicking the deployment button, the local file selection box will pop up, which supports the selection of shell script files for execution
 
-* ### 截图:
+* ### Main Dependencies
 
-    ![img](resource/main.png)
+    1. [jediterm](https://github.com/JetBrains/jediterm)
+    
+    2. [jsch](http://www.jcraft.com/jsch/)
 
-    ![img](resource/connect.png)
+* ### Screenshot:
+
+    ![img](resource/main-en.png)
+
+    ![img](resource/connect-en.png)
