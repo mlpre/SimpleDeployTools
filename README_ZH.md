@@ -2,7 +2,12 @@
 
 [English Document](README.md)
 
-* ### 基于JavaFx的简单部署工具，支持中文和英文，支持通过SSH连接服务器执行命令，同时支持执行本地脚本实现一键部署的功能
+* ### 一个简单的部署工具
+
+   * 基于JavaFx
+   * 支持英文和中文
+   * 支持连接SSH服务器
+   * 支持一键部署shell脚本
 
 * ### 如何使用:
 
@@ -18,15 +23,13 @@
 
 * ### 注意事项:
 
-    1. 默认端口22，如果需要使用其它端口，IP输入框输入IP:端口
-    
-    2. 点击部署按钮后会弹出本地文件选择框，支持选择Shell脚本文件执行
+   * 默认端口22，如果需要使用其它端口，IP输入框输入IP:端口
 
 * ### 主要依赖
 
-    1. [jediterm](https://github.com/JetBrains/jediterm)
+   * [jediterm](https://github.com/JetBrains/jediterm)
     
-    2. [jsch](http://www.jcraft.com/jsch/)
+   * [jsch](http://www.jcraft.com/jsch/)
 
 * ### 截图:
 
