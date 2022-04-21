@@ -1,4 +1,4 @@
-package ml.minli.util;
+package io.github.mlpre.util;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.JSch;

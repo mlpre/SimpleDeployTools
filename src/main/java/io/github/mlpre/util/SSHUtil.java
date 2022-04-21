@@ -1,4 +1,4 @@
-package ml.minli.util;
+package io.github.mlpre.util;
 
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.Session;

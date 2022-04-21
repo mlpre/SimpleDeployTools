@@ -1,8 +1,9 @@
-package ml.minli.controller;
+package io.github.mlpre.controller;
 
 import com.google.common.base.Ascii;
 import com.jediterm.terminal.ui.JediTermWidget;
 import com.jfoenix.controls.JFXButton;
+import io.github.mlpre.util.LanguageUtil;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
@@ -12,10 +13,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import ml.minli.util.CustomSettingsProvider;
-import ml.minli.util.JSchShellTtyConnector;
-import ml.minli.util.LanguageUtil;
-import ml.minli.util.SSHUtil;
+import io.github.mlpre.util.CustomSettingsProvider;
+import io.github.mlpre.util.JSchShellTtyConnector;
+import io.github.mlpre.util.SSHUtil;
 
 import javax.swing.*;
 import java.io.File;

@@ -1,7 +1,7 @@
-package ml.minli;
+package io.github.mlpre;
 
+import io.github.mlpre.ui.MainUI;
 import javafx.application.Application;
-import ml.minli.ui.MainUI;
 
 public class SimpleDeployToolsApp {
 

@@ -1,4 +1,4 @@
-package ml.minli.util;
+package io.github.mlpre.util;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
