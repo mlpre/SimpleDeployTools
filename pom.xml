@@ -20,7 +20,7 @@
         <jsch.version>0.1.55</jsch.version>
         <jzlib.version>1.1.3</jzlib.version>
         <log4j.version>1.2.17</log4j.version>
-        <guava.version>31.1-jre</guava.version>
+        <guava.version>32.0.0-jre</guava.version>
         <annotations.version>23.0.0</annotations.version>
     </properties>
 
